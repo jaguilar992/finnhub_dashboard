@@ -2,55 +2,60 @@ import React, { useState } from "react";
 import { Dropdown } from 'semantic-ui-react';
 
 interface SubscribeFormProps {
-  onSubmit: (symbol: string, alertValue: string) => void;
+  onSubmit: (symbol: string, name: string, alertValue: number) => void;
 }
 
 const SubscribeForm: React.FC<SubscribeFormProps> = ({ onSubmit }) => {
   const [symbol, setSymbol] = useState('');
   const [alertValue, setAlertValue] = useState('0.00');
   const symbolOptions = [
-    { key: 'AAPL', text: 'Apple Inc.', value: 'AAPL' },
-    { key: 'GOOG', text: 'Alphabet Inc. (Google)', value: 'GOOG' },
-    { key: 'BINANCE:BTCUSDT', text: 'Binance Bitcoin/USDT', value: 'BINANCE:BTCUSDT' },
-    { key: 'MSFT', text: 'Microsoft Corporation', value: 'MSFT' },
-    { key: 'AMZN', text: 'Amazon.com Inc.', value: 'AMZN' },
-    { key: 'FB', text: 'Facebook Inc.', value: 'FB' },
-    { key: 'TSLA', text: 'Tesla Inc.', value: 'TSLA' },
-    { key: 'BRK-A', text: 'Berkshire Hathaway Inc.', value: 'BRK-A' },
-    { key: 'JPM', text: 'JPMorgan Chase & Co.', value: 'JPM' },
-    { key: 'V', text: 'Visa Inc.', value: 'V' },
-    { key: 'JNJ', text: 'Johnson & Johnson', value: 'JNJ' },
-    { key: 'BTC-USD', text: 'Bitcoin (BTC) - USD', value: 'BTC-USD' },
-    { key: 'ETH-USD', text: 'Ethereum (ETH) - USD', value: 'ETH-USD' },
-    { key: 'EUR-USD', text: 'Euro (EUR) - USD', value: 'EUR-USD' },
-    { key: 'GBP-USD', text: 'British Pound (GBP) - USD', value: 'GBP-USD' },
+    { key: 'AAPL', text: 'Apple Inc.', value: 'AAPL', name: 'Apple Inc.' },
+    { key: 'GOOG', text: 'Alphabet Inc. (Google)', value: 'GOOG', name: 'Alphabet Inc. (Google)' },
+    { key: 'BINANCE:BTCUSDT', text: 'Binance Bitcoin/USDT', value: 'BINANCE:BTCUSDT', name: 'Binance Bitcoin/USDT' },
+    { key: 'MSFT', text: 'Microsoft Corporation', value: 'MSFT', name: 'Microsoft Corporation' },
+    { key: 'AMZN', text: 'Amazon.com Inc.', value: 'AMZN', name: 'Amazon.com Inc.' },
+    { key: 'FB', text: 'Facebook Inc.', value: 'FB', name: 'Facebook Inc.' },
+    { key: 'TSLA', text: 'Tesla Inc.', value: 'TSLA', name: 'Tesla Inc.' },
+    { key: 'BRK-A', text: 'Berkshire Hathaway Inc.', value: 'BRK-A', name: 'Berkshire Hathaway Inc.' },
+    { key: 'JPM', text: 'JPMorgan Chase & Co.', value: 'JPM', name: 'JPMorgan Chase & Co.' },
+    { key: 'V', text: 'Visa Inc.', value: 'V', name: 'Visa Inc.' },
+    { key: 'JNJ', text: 'Johnson & Johnson', value: 'JNJ', name: 'Johnson & Johnson' },
+    { key: 'BTC-USD', text: 'Bitcoin (BTC) - USD', value: 'BTC-USD', name: 'Bitcoin (BTC) - USD' },
+    { key: 'ETH-USD', text: 'Ethereum (ETH) - USD', value: 'ETH-USD', name: 'Ethereum (ETH) - USD' },
+    { key: 'EUR-USD', text: 'Euro (EUR) - USD', value: 'EUR-USD', name: 'Euro (EUR) - USD' },
+    { key: 'GBP-USD', text: 'British Pound (GBP) - USD', value: 'GBP-USD', name: 'British Pound (GBP) - USD' },
   ];
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSubmit(symbol, alertValue);
+    const selectedOption = symbolOptions.find(option => option.value === symbol);
+    if (selectedOption) {
+      onSubmit(symbol, selectedOption.name, parseFloat(alertValue));
+    }
   };
 
   return (
-    <div className="ui card" style={{ padding: "30px" }}>
-      <h4>Subscribe to a Symbol</h4>
+    <div className="ui fluid card" style={{ padding: "30px" }}>
+      <h4>Subscribe</h4>
       <form onSubmit={handleSubmit} className="ui form">
-        <label>Stock:</label>
-        <Dropdown
-          placeholder="Select a stock or currency"
-          fluid
-          selection
-          options={symbolOptions}
-          value={symbol}
-          onChange={(event, { value }) => setSymbol(value)}
-        />
-        <br />
-        <label>
-          Alert Value (USD):
+      <div className="field">
+          <label>Stock:</label>
+          <Dropdown
+            placeholder="Select a stock or currency"
+            fluid
+            selection
+            options={symbolOptions}
+            value={symbol}
+            onChange={(event, { value }) => setSymbol(value)}
+          />
+        </div>
+        <div className="field">
+          <label>Alert Value (USD):</label>
           <input type="number" step={0.01} value={alertValue} onChange={(event) => setAlertValue(event.target.value)} />
-        </label>
-        <br />
-        <button className="ui button" type="submit">Subscribe</button>
+        </div>
+        <div className="button group">
+          <button className="ui button" type="submit">Subscribe</button>
+        </div>
       </form>
     </div>
   );

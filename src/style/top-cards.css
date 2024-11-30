@@ -1,0 +1,6 @@
+#top-cards {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+  overflow-x: scroll;
+}
