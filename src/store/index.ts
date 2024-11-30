@@ -1,29 +1,39 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { openDB } from "idb";
 
-// Inicializar IndexedDB
-const dbPromise = openDB("pwa-stocks", 1, {
+// Initialize IndexedDB
+const dbPromise = openDB("pwa_stocks", 1, {
   upgrade(db) {
     if (!db.objectStoreNames.contains("stocks")) {
-      db.createObjectStore("stocks", { keyPath: "id", autoIncrement: true });
-      db.createObjectStore("stocks").createIndex("symbol", "symbol", { unique: true });
+      db
+      .createObjectStore("stocks", { keyPath: "id", autoIncrement: true })
+      .createIndex("symbol", "symbol", { unique: true });
     }
     if (!db.objectStoreNames.contains("history")) {
-      db.createObjectStore("history", { keyPath: "id" });
+      db.createObjectStore("history", { keyPath: "id"})
+      .createIndex("symbol", "symbol");
     }
   },
 });
 
-// Interfaz para la DB stocks
+// Interface for the DB stocks
 interface StockDB {
   id: number;
   symbol: string;
   value: number;
-  name: string; // Agregado nombre al stock
+  name: string; // Added name to the stock
 }
 
-// Funciones auxiliares para IndexedDB
-const idbSet = async (storeName: string, value: StockDB) => {
+// Interface for the DB history
+interface HistoryDB {
+  timestamp: string;
+  symbol: string;
+  price: number;
+  volume: number;
+}
+
+// Auxiliary functions for IndexedDB
+const idbSetStock = async (storeName: string, value: StockDB) => {
   const db = await dbPromise;
   const tx = db.transaction(storeName, "readwrite");
   const store = tx.objectStore(storeName);
@@ -33,6 +43,14 @@ const idbSet = async (storeName: string, value: StockDB) => {
   } else {
     alert("This stock has already been added before.");
   }
+  await tx.done;
+};
+
+const idbSetHistory = async (storeName: string, value: HistoryDB) => {
+  const db = await dbPromise;
+  const tx = db.transaction(storeName, "readwrite");
+  const store = tx.objectStore(storeName);
+  await store.put(value);
   await tx.done;
 };
 
@@ -56,7 +74,7 @@ const stocksSlice = createSlice({
       const existingStock = state.find(stock => stock.symbol === action.payload.symbol);
       if (!existingStock) {
         state.push(action.payload);
-        idbSet("stocks", action.payload);
+        idbSetStock("stocks", action.payload);
       } else {
         alert("This stock has already been added before.");
       }
@@ -84,8 +102,10 @@ const historySlice = createSlice({
   reducers: {
     setHistory: (state, action) => action.payload,
     addHistory: (state, action) => {
-      state.push(action.payload);
-      idbSet("history", action.payload);
+      if (!state.some(historyItem => historyItem.timestamp === action.payload.timestamp)) {
+        state.push(action.payload);
+      }
+      idbSetHistory("history", action.payload);
     },
   },
 });
@@ -98,7 +118,7 @@ const store = configureStore({
   },
 });
 
-// Cargar datos iniciales desde IndexedDB
+// Load initial data from IndexedDB
 (async () => {
   const stocks = await idbGetAll("stocks");
   const history = await idbGetAll("history");
@@ -107,7 +127,7 @@ const store = configureStore({
   store.dispatch(historySlice.actions.setHistory(history));
 })();
 
-export const { addStock, setStocks } = stocksSlice.actions;
+export const { addStock, setStocks, removeStockBySymbol } = stocksSlice.actions;
 export const { addHistory, setHistory } = historySlice.actions;
 
 export default store;

@@ -3,7 +3,7 @@ import './App.css'
 import SubscribeForm from './components/SubscribeForm'
 import { FinnHubSocket } from "./services/finnhub/socket";
 import { useDispatch, useSelector } from 'react-redux';
-import { addStock } from './store';
+import { addHistory, addStock, removeStockBySymbol } from './store';
 import { Stock, TopCards } from './components/TopCards';
 import { Graph } from './components/Graph';
 
@@ -14,20 +14,44 @@ function App() {
 
   useEffect(() => {
     const initializeSubscriptions = () => {
+      console.log("Updating subscriptions to finnhub")
       stocks.forEach(s => {
-        console.log("Initializing subscription to stored stocks")
+        console.log(`Initializing subscription to stored stocks: ${s.symbol}`)
         socket.subscribe(s.symbol);
       });
     }
-    setTimeout(initializeSubscriptions, 5000);
-  }, [])
+    setTimeout(initializeSubscriptions, 1000);
+  }, [socket, stocks])
+
+  useEffect(() => {
+    const saveToHistory = (_data: string) => {
+      try {
+        const {data, type: msgType} = JSON.parse(_data);
+        if (msgType !== 'trade') return;
+        const lastItem = data[data.length - 1];
+        dispatch(addHistory({
+          id: lastItem.t,
+          timestamp: lastItem.t,
+          symbol: lastItem.s,
+          volume: lastItem.v, 
+          price: lastItem.p,
+        }));
+      } catch (error) {
+        console.error("Error parsing JSON:", error);
+      }
+    }
+    socket.on("message", saveToHistory)
+  }, [dispatch, socket])
 
   const subscribe = (symbol: string, name: string, value: number) => {
     if (!symbol) return;
-    socket.subscribe(symbol);
-    dispatch(
-      addStock({ symbol, value, name})
-    );
+    dispatch(addStock({ symbol, value, name}));
+  }
+
+  const unsuscribe = (symbol: string) => {
+    if (!symbol) return;
+    socket.unsubscribe(symbol);
+    dispatch(removeStockBySymbol(symbol));
   }
 
   return (
@@ -35,8 +59,8 @@ function App() {
       <div className="ui grid">
       <div className="one columns row">
           <div className="sixteen wide column">
-            <h3>Alerts</h3>
-            <TopCards />
+            <h3>Stock monitor</h3>
+            <TopCards onDelete={unsuscribe}/>
           </div>
         </div>
       </div>

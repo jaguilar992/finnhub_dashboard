@@ -1,6 +1,6 @@
 import {config} from '../../config.ts';
 
-interface FinnHubSocketEvents {
+export interface FinnHubSocketEvents {
     message: (data: string) => void;
     error: (error: Error) => void; // Changed from any to Error
     close: () => void;
@@ -28,16 +28,15 @@ export class FinnHubSocket {
         this.socket.addEventListener('open', () => {
             console.log('WebSocket connection established');
             this.isSocketReady = true;
-            this.subscribe("IC MARKETS:1")
         });
 
         this.socket.addEventListener('message', (event) => {
-            console.log(`Received message: ${event.data}`);
             this.emit('message', event.data);
         });
 
         this.socket.addEventListener('error', (error) => {
             console.error('WebSocket error:', error);
+            alert("Please check your internet connection")
             this.emit('error', error);
         });
 

@@ -1,6 +1,7 @@
 #top-cards {
   display: flex;
   flex-direction: row;
-  padding: 15px;
   overflow-x: scroll;
+  padding-left: 1px;
+  padding-right: 1px;
 }

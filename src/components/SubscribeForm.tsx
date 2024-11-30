@@ -21,7 +21,7 @@ const SubscribeForm: React.FC<SubscribeFormProps> = ({ onSubmit }) => {
     { key: 'V', text: 'Visa Inc.', value: 'V', name: 'Visa Inc.' },
     { key: 'JNJ', text: 'Johnson & Johnson', value: 'JNJ', name: 'Johnson & Johnson' },
     { key: 'BTC-USD', text: 'Bitcoin (BTC) - USD', value: 'BTC-USD', name: 'Bitcoin (BTC) - USD' },
-    { key: 'ETH-USD', text: 'Ethereum (ETH) - USD', value: 'ETH-USD', name: 'Ethereum (ETH) - USD' },
+    { key: 'BINANCE:ETHBTC', text: 'Ethereum (ETH) - USD', value: 'BINANCE:ETHBTC', name: 'Ethereum (ETH) - USD' },
     { key: 'EUR-USD', text: 'Euro (EUR) - USD', value: 'EUR-USD', name: 'Euro (EUR) - USD' },
     { key: 'GBP-USD', text: 'British Pound (GBP) - USD', value: 'GBP-USD', name: 'British Pound (GBP) - USD' },
   ];
@@ -29,8 +29,10 @@ const SubscribeForm: React.FC<SubscribeFormProps> = ({ onSubmit }) => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const selectedOption = symbolOptions.find(option => option.value === symbol);
-    if (selectedOption) {
+    if (selectedOption && parseFloat(alertValue) > 0) {
       onSubmit(symbol, selectedOption.name, parseFloat(alertValue));
+    } else if (parseFloat(alertValue) === 0) {
+      alert("Alert value cannot be zero. Please enter a valid value.");
     }
   };
 

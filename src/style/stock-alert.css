@@ -1,0 +1,19 @@
+
+.ui.red.text {
+  margin-top: 5px;
+  color: red!important;
+}
+
+.ui.green.text {
+  margin-top: 5px;
+  color: green!important;
+}
+
+h5, .header-text{
+  margin-top: 5px;
+  color: gray;
+}
+.ui.blue.text {
+  color: #4dacfa;
+  margin-bottom: 5px;
+}
