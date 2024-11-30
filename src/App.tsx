@@ -15,15 +15,20 @@ function App() {
     setList([...list, _symbol]);
   }
 
+  const unsubscribe = (_symbol) => {
+    setList(list.filter(symbol => symbol !== _symbol));
+    socket.unsubscribe(_symbol);
+  }
   const subscribe = () => {
     const _symbol = symbolInput?.current?.value || '';
     if (!_symbol) return;
     addToList(_symbol)
     socket.subscribe(_symbol);
+    symbolInput.current.value = '';
   }
 
   const renderList = () => {
-    return list.map(s => <p key={s}>{s}</p>)
+    return list.map(s => <p key={s}>{s} - <span onClick={() => unsubscribe(s)}>X</span></p>)
   }
 
   return (
