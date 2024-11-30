@@ -13,7 +13,7 @@ export class FinnHubSocket {
     private isSocketReady: boolean = false;
 
     private constructor() {
-        this.socket = new WebSocket(`${config.finnhubBaseUrl}?token=${config.finnhubToken}`);
+        this.socket = new WebSocket(`${config.finnhubWSBaseUrl}?token=${config.finnhubToken}`);
         this.setupSocketEvents();
     }
 
@@ -28,7 +28,7 @@ export class FinnHubSocket {
         this.socket.addEventListener('open', () => {
             console.log('WebSocket connection established');
             this.isSocketReady = true;
-            this.subscribe('AAPL');
+            this.subscribe("IC MARKETS:1")
         });
 
         this.socket.addEventListener('message', (event) => {
@@ -50,6 +50,7 @@ export class FinnHubSocket {
 
     public subscribe(symbol: string) {
         if (this.isSocketReady) {
+            console.log(`Subscribing to stock: ${symbol}`)
             this.socket.send(JSON.stringify({type: 'subscribe', symbol}));
         } else {
             console.log('Socket is not ready to send messages');

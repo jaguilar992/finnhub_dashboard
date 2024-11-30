@@ -1,8 +1,7 @@
-import {useEffect, useRef, useState} from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import {FinnHubSocket} from "./services/finnhub";
+import SubscribeForm from './components/SubscribeForm'
+import { FinnHubSocket } from "./services/finnhub/socket";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -19,12 +18,10 @@ function App() {
     setList(list.filter(symbol => symbol !== _symbol));
     socket.unsubscribe(_symbol);
   }
-  const subscribe = () => {
-    const _symbol = symbolInput?.current?.value || '';
+  const subscribe = (_symbol) => {
     if (!_symbol) return;
     addToList(_symbol)
-    socket.subscribe(_symbol);
-    symbolInput.current.value = '';
+    socket.subscribe(_symbol);;
   }
 
   const renderList = () => {
@@ -33,9 +30,23 @@ function App() {
 
   return (
     <>
-    {renderList()}
-    <input type="text" name="symbol" id="symbol" ref={symbolInput}/>
-    <button onClick={subscribe}>Subscribe</button>
+      <div className="ui grid">
+        <div className="one columns row">
+          <div className="sixteen wide column">
+            <h1>Alerts</h1>
+          </div>
+        </div>
+        <div className="two columns row">
+          <div className="eight wide column">
+            <SubscribeForm
+              onSubmit={subscribe}
+            />
+          </div>
+          <div className="eight wide column">
+            <h1>Graph</h1>
+          </div>
+        </div>
+      </div>
     </>
   )
 }
