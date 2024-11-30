@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/styled": "^11.13.5",
+    "@mui/x-charts": "^7.23.0",
     "@reduxjs/toolkit": "^2.4.0",
     "axios": "^1.7.8",
     "idb": "^8.0.0",

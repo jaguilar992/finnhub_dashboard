@@ -28,6 +28,7 @@ export class FinnHubSocket {
         this.socket.addEventListener('open', () => {
             console.log('WebSocket connection established');
             this.isSocketReady = true;
+            this.subscribe("BINANCE:BTCUSDT")
         });
 
         this.socket.addEventListener('message', (event) => {

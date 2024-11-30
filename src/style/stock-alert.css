@@ -1,11 +1,16 @@
+.item .header {
+  min-height: 105px;
+}
+.ui.text {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 
 .ui.red.text {
-  margin-top: 5px;
   color: red!important;
 }
 
 .ui.green.text {
-  margin-top: 5px;
   color: green!important;
 }
 
@@ -14,6 +19,6 @@ h5, .header-text{
   color: gray;
 }
 .ui.blue.text {
-  color: #4dacfa;
+  color: #3286cb;
   margin-bottom: 5px;
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import "../../style/stock-alert.css"
+import { HistoryDB } from '../../store';
 
 interface StockAlertProps {
   symbol: string;
@@ -13,16 +14,16 @@ const cardStyle ={
   width: "170px"
 }
 
-const formatCurrency = (price) => `$ ${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-const formatPercentage = (number) => number.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const formatCurrency = (price: number) => `$ ${price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+const formatPercentage = (amount: number) => amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 
 
 
 export const StockAlert: React.FC<StockAlertProps> = ({ symbol, value, onDelete, name }) => {
   const history = useSelector(state => state.history);
   const currentStockHistory = history
-  .filter(item => item.symbol === symbol)
-  .sort((a,b) => a.timestamp - b.timestamp)
+  .filter((item:HistoryDB) => item.symbol === symbol)
+  .sort((a:HistoryDB ,b: HistoryDB) => a.timestamp - b.timestamp)
   .slice(-100);
 
   
@@ -43,12 +44,12 @@ export const StockAlert: React.FC<StockAlertProps> = ({ symbol, value, onDelete,
         <div className="header">
           <h5 className='header-text ui blue text'>{name}</h5>
           <h5 className='header-text'>{symbol}</h5>
-          {lastPrice && (
+          {lastPrice ? (
             <>
               <h5 className={cn}>{formatCurrency(lastPrice)}</h5>
-              <h5 className={cn}>({lastPrice > value ? '+' : '-'}{formatPercentage(marginChange)}%)</h5>
+              <h5 className={cn}>({lastPrice > value ? '+' : ''}{formatPercentage(marginChange)}%)</h5>
             </>
-          )}
+          ) : <h5><i>No updates</i></h5>}
         </div>
         <hr />
         <div className="meta">

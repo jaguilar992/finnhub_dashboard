@@ -9,9 +9,9 @@ const SubscribeForm: React.FC<SubscribeFormProps> = ({ onSubmit }) => {
   const [symbol, setSymbol] = useState('');
   const [alertValue, setAlertValue] = useState('0.00');
   const symbolOptions = [
+    { key: 'BINANCE:BTCUSDT', text: 'Binance Bitcoin/USDT', value: 'BINANCE:BTCUSDT', name: 'Binance Bitcoin/USDT' },
     { key: 'AAPL', text: 'Apple Inc.', value: 'AAPL', name: 'Apple Inc.' },
     { key: 'GOOG', text: 'Alphabet Inc. (Google)', value: 'GOOG', name: 'Alphabet Inc. (Google)' },
-    { key: 'BINANCE:BTCUSDT', text: 'Binance Bitcoin/USDT', value: 'BINANCE:BTCUSDT', name: 'Binance Bitcoin/USDT' },
     { key: 'MSFT', text: 'Microsoft Corporation', value: 'MSFT', name: 'Microsoft Corporation' },
     { key: 'AMZN', text: 'Amazon.com Inc.', value: 'AMZN', name: 'Amazon.com Inc.' },
     { key: 'FB', text: 'Facebook Inc.', value: 'FB', name: 'Facebook Inc.' },

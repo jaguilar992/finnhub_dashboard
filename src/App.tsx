@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 import SubscribeForm from './components/SubscribeForm'
 import { FinnHubSocket } from "./services/finnhub/socket";
@@ -55,6 +55,13 @@ function App() {
   }
 
   return (
+    <>
+    <div className="ui inverted top attached menu">
+      <div className="item">
+        <img src="diagram.png" alt="Logo" width="18px"/>
+      </div>
+      <div className="header item">RealTime Stocks</div>
+    </div>
     <div className='ui container' style={{paddingTop: "15px"}}>
       <div className="ui grid">
       <div className="one columns row">
@@ -73,11 +80,12 @@ function App() {
           </div>
           <div className="eight wide column">
             <h3>Graph</h3>
-            <Graph />
+            <Graph title='Stock prices'/>
           </div>
         </div>
       </div>
     </div>
+    </>
   )
 }
 

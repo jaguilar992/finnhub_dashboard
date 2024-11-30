@@ -17,7 +17,7 @@ const dbPromise = openDB("pwa_stocks", 1, {
 });
 
 // Interface for the DB stocks
-interface StockDB {
+export interface StockDB {
   id: number;
   symbol: string;
   value: number;
@@ -25,8 +25,8 @@ interface StockDB {
 }
 
 // Interface for the DB history
-interface HistoryDB {
-  timestamp: string;
+export interface HistoryDB {
+  timestamp: number;
   symbol: string;
   price: number;
   volume: number;
@@ -100,9 +100,9 @@ const historySlice = createSlice({
   name: "history",
   initialState: [],
   reducers: {
-    setHistory: (state, action) => action.payload,
+    setHistory: (state: any, action) => action.payload,
     addHistory: (state, action) => {
-      if (!state.some(historyItem => historyItem.timestamp === action.payload.timestamp)) {
+      if (!state.some((historyItem: HistoryDB) => historyItem.timestamp === action.payload.timestamp)) {
         state.push(action.payload);
       }
       idbSetHistory("history", action.payload);
