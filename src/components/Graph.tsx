@@ -8,8 +8,8 @@ interface GraphProps {
 }
 
 export const Graph : React.FC<GraphProps> = () => {
-  const stocks = useSelector(state => state.stocks);
-  const history = useSelector(state => state.history);
+  const stocks = useSelector((state: { stocks: StockDB[] }) => state.stocks);
+  const history = useSelector((state: { history: HistoryDB[] }) => state.history);
   const allData = stocks.map((s: StockDB) => {
     const currHistory = history
       .filter((i: HistoryDB) => i.symbol === s.symbol)

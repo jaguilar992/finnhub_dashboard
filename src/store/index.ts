@@ -69,7 +69,7 @@ const stocksSlice = createSlice({
   name: "stocks",
   initialState: [] as StockDB[],
   reducers: {
-    setStocks: (state, action) => action.payload,
+    setStocks: (_, action) => action.payload,
     addStock: (state, action) => {
       const existingStock = state.find(stock => stock.symbol === action.payload.symbol);
       if (!existingStock) {
@@ -98,9 +98,9 @@ const stocksSlice = createSlice({
 // History Slice
 const historySlice = createSlice({
   name: "history",
-  initialState: [],
+  initialState: [] as HistoryDB[],
   reducers: {
-    setHistory: (state: any, action) => action.payload,
+    setHistory: (_, action) => action.payload,
     addHistory: (state, action) => {
       if (!state.some((historyItem: HistoryDB) => historyItem.timestamp === action.payload.timestamp)) {
         state.push(action.payload);

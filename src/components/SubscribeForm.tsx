@@ -48,7 +48,7 @@ const SubscribeForm: React.FC<SubscribeFormProps> = ({ onSubmit }) => {
             selection
             options={symbolOptions}
             value={symbol}
-            onChange={(event, { value }) => setSymbol(value)}
+            onChange={(_, data) => setSymbol(data.value as string)}
           />
         </div>
         <div className="field">

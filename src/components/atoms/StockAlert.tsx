@@ -20,7 +20,7 @@ const formatPercentage = (amount: number) => amount.toLocaleString(undefined, {m
 
 
 export const StockAlert: React.FC<StockAlertProps> = ({ symbol, value, onDelete, name }) => {
-  const history = useSelector(state => state.history);
+  const history = useSelector((state: { history: HistoryDB[] }) => state.history);
   const currentStockHistory = history
   .filter((item:HistoryDB) => item.symbol === symbol)
   .sort((a:HistoryDB ,b: HistoryDB) => a.timestamp - b.timestamp)
