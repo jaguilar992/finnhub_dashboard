@@ -1,50 +1,41 @@
-# React + TypeScript + Vite
+<img src="https://cdn-icons-png.flaticon.com/512/2285/2285545.png" width="50px"/>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# RealTime Stocks
 
-Currently, two official plugins are available:
+This is a web page that displays real-time stock prices using the Finnhub API. The page is built with Vite+React, a next-generation frontend tooling that makes it easy to start writing modern Typescript applications.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The project directory structure is as follows:
 
-## Expanding the ESLint configuration
+- `src`: This directory contains the source code for the application.
+- `public`: Public assets for the application.
+- `vite.config.js`: This file contains the configuration for the Vite build tool.
+- `Dockerfile`: Instructions for building the Docker image.
+- `docker-compose.yaml`: configuration for the Docker Compose service.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Instructions
+1. Clone the repository
+``` bash
+git clone https://github.com/jaguilar992/finnhub_dashboard.git
+```
+2. Create a new .env file using the .env.example provided in the repo
+```
+VITE_FINNHUB_WS_URL="wss://ws.finnhub.io"
+VITE_FINNHUB_API_URL="https://finnhub.io"
+VITE_FINNHUB_TOKEN=<YOUR_API_TOKEN>
+```
+3. Deploy the project using `docker-compose`
+```
+docker-compose up -d --build
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Features
+1. Developed using the Typescript programming language
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2. The main route / consists of 3 components:
+* TopCards: Displays stock price alerts, one per card
+* SubscribeForm: Allows adding new stock alerts, by specifying a price to monitor
+* Graph: Displays the prices of subscribed stocks in real-time via chart
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+3. The app connects to the Websocket Finnhub service to obtain real time updates.
+
+4. In the top cards, the user will see a red text showing the price is below the alert value, and a green text if it is above
