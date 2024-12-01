@@ -46,6 +46,7 @@ const idbSetStock = async (storeName: string, value: StockDB) => {
   await tx.done;
 };
 
+// Add stock prices payloads to history
 const idbSetHistory = async (storeName: string, value: HistoryDB) => {
   const db = await dbPromise;
   const tx = db.transaction(storeName, "readwrite");
@@ -54,11 +55,13 @@ const idbSetHistory = async (storeName: string, value: HistoryDB) => {
   await tx.done;
 };
 
+// Auxiliary function to get all data from an IndexedDB collection
 const idbGetAll = async (storeName: string) => {
   const db = await dbPromise;
   return db.getAll(storeName);
 };
 
+// Auxiliary function to filtered data from an IndexedDB collection (by symbol)
 const idbGetBySymbol = async (storeName: string, symbol: string) => {
   const db = await dbPromise;
   return db.getAllFromIndex(storeName, "symbol", symbol);

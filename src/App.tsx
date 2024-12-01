@@ -8,10 +8,13 @@ import { Stock, TopCards } from './components/TopCards';
 import { Graph } from './components/Graph';
 
 function App() {
+  // Singleton for FinnHubSocket 
   const socket = FinnHubSocket.getInstance();
   const dispatch = useDispatch();
   const stocks = useSelector((state: { stocks: Stock[] }) => state.stocks);
 
+  // Initializes the stocks to monitor, reading from the store 
+  // (The store is populated from IndedexDB during its initialization)
   useEffect(() => {
     const initializeSubscriptions = () => {
       console.log("Updating subscriptions to finnhub")
@@ -23,12 +26,15 @@ function App() {
     setTimeout(initializeSubscriptions, 1000);
   }, [socket, stocks])
 
+  // Add an event listener to push the updates from finnhub to the store and IndexedDB
   useEffect(() => {
     const saveToHistory = (_data: string) => {
       try {
         const {data, type: msgType} = JSON.parse(_data);
+        // Only accept trade type messages
         if (msgType !== 'trade') return;
         const lastItem = data[data.length - 1];
+        // Add the data to store
         dispatch(addHistory({
           id: lastItem.t,
           timestamp: lastItem.t,
@@ -40,6 +46,7 @@ function App() {
         console.error("Error parsing JSON:", error);
       }
     }
+    // Add event listener callback on socket communication
     socket.on("message", saveToHistory)
   }, [dispatch, socket])
 
